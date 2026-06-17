@@ -849,7 +849,7 @@ ibmcloud ce application update --name my-app \
   --probe-live type="http" \
   --probe-live path="/health" \
   --probe-live initial-delay=10 \
-  --probe-live period=10
+  --probe-live interval=10
 ```
 
 ## Complete Production Example
@@ -881,7 +881,7 @@ ibmcloud ce application create --name api-server \
   --probe-live type="http" \
   --probe-live path="/health" \
   --probe-live initial-delay=10 \
-  --probe-live period=10
+  --probe-live interval=10
 
 # 4. Verify deployment
 ibmcloud ce application get --name api-server
