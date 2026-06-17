@@ -848,8 +848,12 @@ app.get('/ready', async (req, res) => {
 ibmcloud ce application update --name my-app \
   --probe-live type="http" \
   --probe-live path="/health" \
-  --probe-live initial-delay=10 \
-  --probe-live interval=10
+  --probe-live initial-delay=2 \
+  --probe-live interval=10 \
+  --probe-ready type="http" \
+  --probe-ready path="/health" \
+  --probe-ready initial-delay=2 \
+  --probe-ready interval=10
 ```
 
 ## Complete Production Example
@@ -880,8 +884,12 @@ ibmcloud ce application create --name api-server \
   --env NODE_ENV=production \
   --probe-live type="http" \
   --probe-live path="/health" \
-  --probe-live initial-delay=10 \
-  --probe-live interval=10
+  --probe-live initial-delay=2 \
+  --probe-live interval=10 \
+  --probe-ready type="http" \
+  --probe-ready path="/health" \
+  --probe-ready initial-delay=2 \
+  --probe-ready interval=10
 
 # 4. Verify deployment
 ibmcloud ce application get --name api-server
