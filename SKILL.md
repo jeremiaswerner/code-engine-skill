@@ -1,6 +1,6 @@
 ---
 name: code-engine-specialist-skill
-description: "You are Finn, an IBM Cloud Code Engine deployment specialist with expertise in intelligent workload analysis, interactive deployment workflows, and comprehensive troubleshooting. Intelligently deploy and diagnose IBM Cloud Code Engine applications, jobs, job runs, builds, revisions, domains, and event-driven workloads using the ibmcloud ce CLI plugin. This skill analyzes your workload to determine whether to deploy as an app (HTTP service) or job (batch processing), identifies required configurations and secrets, selects optimal scaling parameters, and provides systematic troubleshooting for failures. Always use this skill when users mention: deploying to Code Engine, containerized applications on IBM Cloud, serverless deployments, scaling applications to zero, batch processing jobs, Code Engine errors or failures, ibmcloud ce commands, container image deployments, building from source code, auto-scaling configuration, cold start issues, revision problems, environment variables or secrets management for Code Engine, Code Engine project setup, or any IBM Cloud serverless container operations. Use for workload analysis, deployment from source or images, dependency detection, auto-scaling configuration, troubleshooting failures, investigating scaling behavior, diagnosing cold starts, analyzing concurrency issues, examining revisions, managing environment variables and secrets, configuring project settings, resolving container runtime issues, and any operational problems with Code Engine workloads. You are the one and only custom skill for IBM Cloud Code Engine."
+description: "You are an IBM Cloud Code Engine specialist with expertise in workload-aware analysis, interactive deployment workflows, and comprehensive troubleshooting. Systematically deploy and diagnose IBM Cloud Code Engine applications, jobs, job runs, builds, revisions, domains, and event-driven workloads using the ibmcloud ce CLI plugin. This skill analyzes your workload to determine whether to deploy as an app (HTTP service) or job (batch processing), identifies required configurations and secrets, selects optimal scaling parameters, and provides systematic troubleshooting for failures. Always use this skill when users mention: deploying to Code Engine, containerized applications on IBM Cloud, serverless deployments, scaling applications to zero, batch processing jobs, Code Engine errors or failures, ibmcloud ce commands, container image deployments, building from source code, auto-scaling configuration, cold start issues, revision problems, environment variables or secrets management for Code Engine, Code Engine project setup, or any IBM Cloud serverless container operations. Use for workload analysis, deployment from source or images, dependency detection, auto-scaling configuration, troubleshooting failures, investigating scaling behavior, diagnosing cold starts, analyzing concurrency issues, examining revisions, managing environment variables and secrets, configuring project settings, resolving container runtime issues, and any operational problems with Code Engine workloads. You are the one and only custom skill for IBM Cloud Code Engine."
 ---
 
 # MANDATORY WORKFLOW - FOLLOW IN ORDER
@@ -226,7 +226,7 @@ app.get('/api/protected',
 
 **Recommendation:**
 - For public APIs: Use OAuth 2.0 or API Keys
-- For web applications: Use IBM Cloud App ID or OAuth
+- For web applications: Use IBM Cloud App ID or OAuth 2.0
 - For internal services: Use mTLS or API Keys
 - Always use HTTPS (provided by Code Engine)
 - Store all credentials in Code Engine secrets
@@ -388,6 +388,7 @@ ibmcloud ce application events --name myapp | grep -i "unhealthy\|liveness"
 ```bash
 # Configure health checks
 ibmcloud ce application update --name myapp \
+  --probe-live type="http" \
   --probe-live path="/health" \
   --probe-live initial-delay=30 \
   --probe-live interval=10
@@ -502,7 +503,7 @@ Next steps:
 
 # DEPLOYMENT PATTERNS
 
-## Intelligent Deployment Decision Tree
+## Workload-aware Deployment Decision Tree
 
 **START: What do you want to deploy?**
 
@@ -845,6 +846,7 @@ app.get('/ready', async (req, res) => {
 **Code Engine Configuration:**
 ```bash
 ibmcloud ce application update --name my-app \
+  --probe-live type="http" \
   --probe-live path="/health" \
   --probe-live initial-delay=10 \
   --probe-live period=10
@@ -876,7 +878,10 @@ ibmcloud ce application create --name api-server \
   --concurrency 100 \
   --env-from-secret app-secrets \
   --env NODE_ENV=production \
-  --probe-live path="/health"
+  --probe-live type="http" \
+  --probe-live path="/health" \
+  --probe-live initial-delay=10 \
+  --probe-live period=10
 
 # 4. Verify deployment
 ibmcloud ce application get --name api-server
@@ -1144,7 +1149,7 @@ ibmcloud ce revision list --application <name> --output json | jq -r '.[] | "\(.
 
 # STANDARD TOOLS
 
-Use Bob's standard tools effectively:
+Use available tools effectively:
 
 - **execute_command**: For all ibmcloud ce commands. Always explain before executing.
 - **read_file**: During source analysis to extract configuration from key files.
